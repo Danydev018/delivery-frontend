@@ -18,8 +18,8 @@
   /* Neutros con mejor contraste */  
   --light-bg: #F1F8E9;  
   --card-bg: #FFFFFF;  
-  --text-primary: #1B5E20;  
-  --text-secondary: #2E7D32;  
+  --text-primary: #0D4F12; /* Más oscuro para mejor contraste */  
+  --text-secondary: #1B5E20;  
   --border-color: #C8E6C9;  
 }  
   
@@ -42,11 +42,12 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.08);  
   background-color: var(--card-bg);  
   margin-bottom: 1.5rem;  
-  transition: transform 0.2s ease, box-shadow 0.2s ease;  
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),   
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);  
 }  
   
 .custom-card:hover {  
-  transform: translateY(-2px);  
+  transform: translateY(-4px) scale(1.02);  
   box-shadow: 0 8px 25px rgba(0,0,0,0.12);  
 }  
   
@@ -78,6 +79,17 @@
   box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);  
   color: white;  
 }  
+
+.btn-primary:active {  
+  transform: translateY(0);  
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);  
+}  
+  
+.btn-primary:disabled {  
+  opacity: 0.6;  
+  transform: none;  
+  cursor: not-allowed;  
+}
   
 .btn-outline-primary {  
   border: 2px solid var(--primary-color);  

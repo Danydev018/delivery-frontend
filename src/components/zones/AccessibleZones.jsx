@@ -32,6 +32,28 @@ const AccessibleZones = () => {
   const getZoneTypeBadge = (tipoZona) => {  
     return tipoZona === 'comercial' ? 'primary' : 'success';  
   };  
+
+  // Función para convertir Neo4j Integer a número JavaScript  
+const convertNeo4jInteger = (neo4jInt) => {  
+  if (neo4jInt && typeof neo4jInt === 'object' && 'low' in neo4jInt) {  
+    return neo4jInt.low;  
+  }  
+  return neo4jInt || 0;  
+};  
+  
+// Función para convertir cualquier valor de manera segura  
+const safeRender = (value) => {  
+  if (value && typeof value === 'object' && 'low' in value) {  
+    return convertNeo4jInteger(value);  
+  }  
+  return value || 'N/A';  
+}; 
+
+console.log('Datos completos:', accessibleZones);  
+if (accessibleZones.length > 0) {  
+  console.log('Primera zona completa:', accessibleZones[0]);  
+  console.log('Propiedades disponibles:', Object.keys(accessibleZones[0]));  
+}
   
   return (  
     <div>  
@@ -127,24 +149,21 @@ const AccessibleZones = () => {
                     {accessibleZones.map((zone, index) => (  
                       <tr key={index}>  
                         <td>  
-                          <strong>{zone.get('zona')}</strong>  
+                          <strong>{safeRender(zone._fields?.[0])}</strong>  
                         </td>  
                         <td>  
-                          <Badge bg={getZoneTypeBadge(zone.get('tipo_zona'))}>  
-                            {zone.get('tipo_zona')}  
+                          <Badge bg="secondary">  
+                            {safeRender(zone._fields?.[1])}  
                           </Badge>  
                         </td>  
                         <td>  
                           <span className="text-primary fw-bold">  
-                            {zone.get('tiempo_minutos')}  
+                            {safeRender(zone._fields?.[2])} {/* Tiempo convertido */}  
                           </span>  
                         </td>  
                         <td>  
-                          <Badge bg={  
-                            zone.get('trafico_actual') === 'alto' ? 'danger' :  
-                            zone.get('trafico_actual') === 'medio' ? 'warning' : 'success'  
-                          }>  
-                            {zone.get('trafico_actual')}  
+                          <Badge bg="secondary">  
+                            {safeRender(zone._fields?.[3])}  
                           </Badge>  
                         </td>  
                       </tr>  

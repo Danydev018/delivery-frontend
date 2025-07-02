@@ -1,6 +1,7 @@
 import React from 'react';  
 import { Card, Badge, Alert, Table, Row, Col } from 'react-bootstrap';  
-  
+import { ArrowDown, ArrowRight } from 'react-bootstrap-icons';
+
 const RouteResults = ({ results }) => {  
   if (!results || !results.length) {  
     return (  
@@ -178,12 +179,19 @@ const RouteResults = ({ results }) => {
                   
                 {index < routeData.relationships.length && (  
                   <div className="route-arrow">  
-                    <div className="arrow-line"></div>  
-                    <div className="arrow-info">  
-                      <small className="text-muted">  
-                        {routeData.relationships[index].tiempo} min  
-                      </small>  
-                    </div>  
+
+                    {index < routeData.relationships.length && (  
+                      <div className="route-arrow">  
+                        <div className="arrow-icon">➡️</div>  
+                        <div className="arrow-info">  
+                          <small className="text-muted">  
+                            {routeData.relationships[index].tiempo} min  
+                          </small>  
+                        </div>  
+                      </div>  
+                    )}  
+
+                    
                   </div>  
                 )}  
               </div>  
