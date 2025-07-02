@@ -1,0 +1,309 @@
+:root {  
+  /* Paleta verde principal - más amigable y profesional */  
+  --primary-color: #4CAF50;  
+  --primary-light: #81C784;  
+  --primary-dark: #388E3C;  
+    
+  /* Verde secundario para acentos */  
+  --secondary-color: #66BB6A;  
+  --secondary-light: #A5D6A7;  
+  --secondary-dark: #2E7D32;  
+    
+  /* Colores de apoyo */  
+  --success-color: #4CAF50;  
+  --warning-color: #FF9800;  
+  --danger-color: #F44336;  
+  --info-color: #2196F3;  
+    
+  /* Neutros con mejor contraste */  
+  --light-bg: #F1F8E9;  
+  --card-bg: #FFFFFF;  
+  --text-primary: #1B5E20;  
+  --text-secondary: #2E7D32;  
+  --border-color: #C8E6C9;  
+}  
+  
+/* Header con nueva paleta verde */  
+.custom-navbar {  
+  position: fixed !important;  
+  top: 0;  
+  left: 0;  
+  right: 0;  
+  z-index: 1030;  
+  width: 100%;  
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;  
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);  
+}  
+  
+/* Cards optimizadas para mejor uso del espacio */  
+.custom-card {  
+  border: none;  
+  border-radius: 12px;  
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);  
+  background-color: var(--card-bg);  
+  margin-bottom: 1.5rem;  
+  transition: transform 0.2s ease, box-shadow 0.2s ease;  
+}  
+  
+.custom-card:hover {  
+  transform: translateY(-2px);  
+  box-shadow: 0 8px 25px rgba(0,0,0,0.12);  
+}  
+  
+.custom-card .card-header {  
+  border-radius: 12px 12px 0 0 !important;  
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-light)) !important;  
+  border: none;  
+  padding: 1rem 1.5rem;  
+  color: white;  
+  font-weight: 600;  
+}  
+  
+/* Botones mejorados con mejor espaciado */  
+.btn-primary {  
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));  
+  border: none;  
+  border-radius: 8px;  
+  padding: 12px 24px;  
+  font-weight: 600;  
+  font-size: 0.95rem;  
+  transition: all 0.3s ease;  
+  color: white;  
+  text-shadow: 0 1px 2px rgba(0,0,0,0.1);  
+}  
+  
+.btn-primary:hover {  
+  background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));  
+  transform: translateY(-1px);  
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);  
+  color: white;  
+}  
+  
+.btn-outline-primary {  
+  border: 2px solid var(--primary-color);  
+  color: var(--primary-color);  
+  background: transparent;  
+  border-radius: 8px;  
+  padding: 10px 20px;  
+  font-weight: 600;  
+  transition: all 0.3s ease;  
+}  
+  
+.btn-outline-primary:hover {  
+  background: var(--primary-color);  
+  color: white;  
+  transform: translateY(-1px);  
+  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);  
+}  
+  
+/* Badges con mejor contraste */  
+.badge {  
+  font-size: 0.85em;  
+  padding: 0.5em 0.8em;  
+  border-radius: 6px;  
+  font-weight: 600;  
+}  
+  
+.bg-primary {  
+  background: var(--primary-color) !important;  
+  color: white !important;  
+}  
+  
+.bg-success {  
+  background: var(--success-color) !important;  
+  color: white !important;  
+}  
+  
+.bg-info {  
+  background: var(--info-color) !important;  
+  color: white !important;  
+}  
+  
+.bg-warning {  
+  background: var(--warning-color) !important;  
+  color: white !important;  
+}  
+  
+.bg-danger {  
+  background: var(--danger-color) !important;  
+  color: white !important;  
+}  
+  
+/* Mejoras en el layout para mejor uso del espacio */  
+.container-fluid {  
+  max-width: 1400px;  
+  margin: 0 auto;  
+}  
+  
+.row {  
+  margin-left: -0.75rem;  
+  margin-right: -0.75rem;  
+}  
+  
+.col, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8 {  
+  padding-left: 0.75rem;  
+  padding-right: 0.75rem;  
+}  
+  
+/* Cards del dashboard optimizadas */  
+.dashboard-card {  
+  height: 100%;  
+  min-height: 140px;  
+  display: flex;  
+  flex-direction: column;  
+  justify-content: center;  
+}  
+  
+.dashboard-card .card-body {  
+  padding: 1.5rem;  
+  text-align: center;  
+}  
+  
+.dashboard-card .display-4 {  
+  font-size: 2.5rem;  
+  margin-bottom: 0.5rem;  
+}  
+  
+/* Formularios con mejor espaciado */  
+.form-group {  
+  margin-bottom: 1.25rem;  
+}  
+  
+.form-label {  
+  font-weight: 600;  
+  color: var(--text-primary);  
+  margin-bottom: 0.5rem;  
+}  
+  
+.form-control {  
+  border: 2px solid #E8F5E8;  
+  border-radius: 8px;  
+  padding: 0.75rem 1rem;  
+  font-size: 0.95rem;  
+  transition: all 0.3s ease;  
+}  
+  
+.form-control:focus {  
+  border-color: var(--primary-color);  
+  box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);  
+}  
+  
+.form-control.is-invalid {  
+  border-color: var(--danger-color);  
+}  
+  
+/* Alertas con mejor contraste */  
+.alert {  
+  border: none;  
+  border-radius: 8px;  
+  padding: 1rem 1.25rem;  
+  font-weight: 500;  
+}  
+  
+.alert-success {  
+  background-color: #E8F5E9;  
+  color: #1B5E20;  
+  border-left: 4px solid var(--success-color);  
+}  
+  
+.alert-danger {  
+  background-color: #FFEBEE;  
+  color: #C62828;  
+  border-left: 4px solid var(--danger-color);  
+}  
+  
+.alert-warning {  
+  background-color: #FFF3E0;  
+  color: #E65100;  
+  border-left: 4px solid var(--warning-color);  
+}  
+  
+.alert-info {  
+  background-color: #E3F2FD;  
+  color: #0D47A1;  
+  border-left: 4px solid var(--info-color);  
+}  
+  
+/* Tablas con mejor espaciado */  
+.table {  
+  margin-bottom: 0;  
+}  
+  
+.table th {  
+  background-color: #F1F8E9;  
+  color: var(--text-primary);  
+  font-weight: 600;  
+  border: none;  
+  padding: 1rem 0.75rem;  
+}  
+  
+.table td {  
+  padding: 0.875rem 0.75rem;  
+  border-color: #E8F5E8;  
+}  
+  
+/* Visualización de rutas mejorada */  
+.route-visualization {  
+  background: linear-gradient(135deg, #F1F8E9, #E8F5E8);  
+  border-radius: 12px;  
+  padding: 1.5rem;  
+  border: 2px solid #C8E6C9;  
+}  
+  
+.route-step {  
+  background: white;  
+  padding: 1rem 1.25rem;  
+  border-radius: 10px;  
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);  
+  border-left: 4px solid var(--primary-color);  
+}  
+  
+/* Responsive mejorado */  
+@media (max-width: 768px) {  
+  .custom-card .card-header {  
+    padding: 0.875rem 1rem;  
+  }  
+    
+  .btn {  
+    padding: 10px 16px;  
+    font-size: 0.9rem;  
+  }  
+    
+  .dashboard-card .display-4 {  
+    font-size: 2rem;  
+  }  
+}  
+  
+/* Mejoras en contraste de texto */  
+.text-primary {  
+  color: var(--text-primary) !important;  
+}  
+  
+.text-secondary {  
+  color: var(--text-secondary) !important;  
+}  
+  
+h1, h2, h3, h4, h5, h6 {  
+  color: var(--text-primary);  
+  font-weight: 600;  
+}  
+  
+/* Animaciones suaves */  
+.custom-card, .btn, .form-control, .alert {  
+  transition: all 0.3s ease;  
+}  
+  
+@keyframes slideIn {  
+  from {  
+    opacity: 0;  
+    transform: translateY(20px);  
+  }  
+  to {  
+    opacity: 1;  
+    transform: translateY(0);  
+  }  
+}  
+  
+.custom-card {  
+  animation: slideIn 0.4s ease-out;  
+}
