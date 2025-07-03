@@ -541,3 +541,167 @@ h1, h2, h3, h4, h5, h6 {
     min-width: 500px;  
   }  
 }
+
+/* Estilos para las pestañas de IncidentManager */  
+.nav-tabs .nav-link {  
+  border: none;  
+  border-radius: 8px 8px 0 0;  
+  padding: 1rem 1.5rem;  
+  font-weight: 600;  
+  color: var(--text-primary);  
+  background-color: var(--light-bg);  
+  transition: all 0.3s ease;  
+  margin-right: 5px;  
+}  
+  
+.nav-tabs .nav-link:hover {  
+  color: var(--primary-color);  
+  background-color: #E8F5E9; /* Un verde muy claro */  
+}  
+  
+.nav-tabs .nav-link.active {  
+  color: white;  
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;  
+  border-color: var(--primary-color) !important;  
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);  
+}  
+  
+.tab-content {  
+  padding: 1.5rem;  
+  border: 1px solid var(--border-color);  
+  border-top: none;  
+  border-radius: 0 0 12px 12px;  
+  background-color: var(--card-bg);  
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);  
+}  
+  
+/* Mejoras para los grupos de formulario */  
+.form-group {  
+  margin-bottom: 1.25rem;  
+}  
+  
+.form-label {  
+  font-weight: 600;  
+  color: var(--text-primary);  
+  margin-bottom: 0.5rem;  
+}  
+  
+.form-control, .form-select {  
+  border: 2px solid #E8F5E8;  
+  border-radius: 8px;  
+  padding: 0.75rem 1rem;  
+  font-size: 0.95rem;  
+  transition: all 0.3s ease;  
+}  
+  
+.form-control:focus, .form-select:focus {  
+  border-color: var(--primary-color);  
+  box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);  
+}  
+  
+.form-control.is-invalid {  
+  border-color: var(--danger-color);  
+}  
+  
+/* Estilos para los títulos dentro de las cards */  
+.card-header h5 {  
+  font-size: 1.25rem;  
+  font-weight: 700;  
+}  
+  
+/* Ajustes para los botones dentro de las cards */  
+.card-body .btn {  
+  margin-top: 1rem;  
+}
+
+/* Estilos para las pestañas de NetworkAnalysis (reutiliza los de IncidentManager) */  
+.nav-tabs .nav-link {  
+  border: none;  
+  border-radius: 8px 8px 0 0;  
+  padding: 1rem 1.5rem;  
+  font-weight: 600;  
+  color: var(--text-primary);  
+  background-color: var(--light-bg);  
+  transition: all 0.3s ease;  
+  margin-right: 5px;  
+}  
+  
+.nav-tabs .nav-link:hover {  
+  color: var(--primary-color);  
+  background-color: #E8F5E9; /* Un verde muy claro */  
+}  
+  
+.nav-tabs .nav-link.active {  
+  color: white;  
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark)) !important;  
+  border-color: var(--primary-color) !important;  
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2);  
+}  
+  
+.tab-content {  
+  padding: 1.5rem;  
+  border: 1px solid var(--border-color);  
+  border-top: none;  
+  border-radius: 0 0 12px 12px;  
+  background-color: var(--card-bg);  
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);  
+}  
+  
+/* Mejoras para los grupos de formulario */  
+.form-group {  
+  margin-bottom: 1.25rem;  
+}  
+  
+.form-label {  
+  font-weight: 600;  
+  color: var(--text-primary);  
+  margin-bottom: 0.5rem;  
+}  
+  
+.form-control, .form-select {  
+  border: 2px solid #E8F5E8;  
+  border-radius: 8px;  
+  padding: 0.75rem 1rem;  
+  font-size: 0.95rem;  
+  transition: all 0.3s ease;  
+}  
+  
+.form-control:focus, .form-select:focus {  
+  border-color: var(--primary-color);  
+  box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);  
+}  
+  
+.form-control.is-invalid {  
+  border-color: var(--danger-color);  
+}  
+  
+/* Estilos para los títulos dentro de las cards */  
+.card-header h5 {  
+  font-size: 1.25rem;  
+  font-weight: 700;  
+}  
+  
+/* Ajustes para los botones dentro de las cards */  
+.card-body .btn {  
+  margin-top: 1rem;  
+}  
+  
+/* Estilos específicos para las tablas de análisis */  
+.table-responsive {  
+  border-radius: 8px;  
+  overflow: hidden;  
+  margin-top: 1.5rem; /* Espacio superior para las tablas */  
+}  
+  
+.table th {  
+  background-color: var(--primary-light); /* Fondo más claro para encabezados */  
+  color: var(--text-primary);  
+  font-weight: 600;  
+  border: none;  
+  padding: 1rem 0.75rem;  
+}  
+  
+.table td {  
+  padding: 0.875rem 0.75rem;  
+  border-color: var(--border-color);  
+}
