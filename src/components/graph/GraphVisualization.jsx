@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';  
 import { Card, Row, Col, Badge, Alert, Button, Spinner } from 'react-bootstrap';  
 import { graphService } from '../../services/api';  
+import Mermaid from 'react-mermaid2'; // Importa el componente Mermaid  
   
 const GraphVisualization = () => {  
   const [graphData, setGraphData] = useState(null);  
@@ -51,7 +52,7 @@ const GraphVisualization = () => {
   
   const getNodeColor = (node) => {  
     if (node.type === 'CentroDistribucion') return 'primary';  
-    return node.tipoZona === 'comercial' ? 'info' : 'success';  
+    return node.tipo_zona === 'comercial' ? 'info' : 'success'; // Usar node.tipo_zona  
   };  
   
   const getTrafficColor = (trafico) => {  
@@ -62,6 +63,48 @@ const GraphVisualization = () => {
       default: return 'secondary';  
     }  
   };  
+  
+  // Cadena de texto Mermaid para el diagrama conceptual  
+  const conceptualDiagramMermaid = `  
+    graph TD  
+        subgraph "Centros de Distribución"  
+            CD_1("CD_1")  
+            CD_2("CD_2")  
+        end  
+  
+        subgraph "Zonas de Entrega"  
+            direction LR  
+            A("Altamira<br/>(Residencial)")  
+            B("Chacao<br/>(Comercial)")  
+            C("Las Mercedes<br/>(Comercial)")  
+            D("La Urbina<br/>(Residencial)")  
+            E("Petare<br/>(Residencial)")  
+            F("El Rosal<br/>(Comercial)")  
+            G("Los Palos Grandes<br/>(Residencial)")  
+            H("El Cafetal<br/>(Residencial)")  
+        end  
+  
+        CD_1 -- "CONECTA<br/>5min, Medio, Cap:3" --> A  
+        A -- "CONECTA<br/>4min, Bajo, Cap:2" --> B  
+        B -- "CONECTA<br/>6min, Alto, Cap:2" --> C  
+        C -- "CONECTA<br/>7min, Medio, Cap:2" --> D  
+        D -- "CONECTA<br/>8min, Bajo, Cap:2" --> E  
+        E -- "CONECTA<br/>9min, Medio, Cap:3" --> F  
+        F -- "CONECTA<br/>3min, Bajo, Cap:2" --> G  
+        G -- "CONECTA<br/>4min, Alto, Cap:2" --> H  
+        CD_2 -- "CONECTA<br/>6min, Medio, Cap:3" --> C  
+  
+        style CD_1 fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff  
+        style CD_2 fill:#4CAF50,stroke:#388E3C,stroke-width:2px,color:#fff  
+        style A fill:#81C784,stroke:#4CAF50,stroke-width:1px,color:#1B5E20  
+        style B fill:#2196F3,stroke:#0D47A1,stroke-width:1px,color:#fff  
+        style C fill:#2196F3,stroke:#0D47A1,stroke-width:1px,color:#fff  
+        style D fill:#81C784,stroke:#4CAF50,stroke-width:1px,color:#1B5E20  
+        style E fill:#81C784,stroke:#4CAF50,stroke-width:1px,color:#1B5E20  
+        style F fill:#2196F3,stroke:#0D47A1,stroke-width:1px,color:#fff  
+        style G fill:#81C784,stroke:#4CAF50,stroke-width:1px,color:#1B5E20  
+        style H fill:#81C784,stroke:#4CAF50,stroke-width:1px,color:#1B5E20  
+    `;  
   
   return (  
     <div>  
@@ -103,7 +146,7 @@ const GraphVisualization = () => {
   
       {graphData && (  
         <>  
-          {/* Esquema del Modelo (puede ser estático o dinámico si lo obtienes del backend) */}  
+          {/* Esquema del Modelo */}  
           <Row className="mb-4">  
             <Col md={6}>  
               <Card className="custom-card">  
@@ -167,8 +210,8 @@ const GraphVisualization = () => {
                         {node.type}  
                       </Badge>  
                       <div className="fw-bold">{node.nombre}</div>  
-                      {node.tipoZona && (  
-                        <small className="text-muted">{node.tipoZona}</small>  
+                      {node.tipo_zona && (  
+                        <small className="text-muted">{node.tipo_zona}</small>  
                       )}  
                     </div>  
                   </Col>  
@@ -224,15 +267,14 @@ const GraphVisualization = () => {
             </Card.Body>  
           </Card>  
   
-          {/* Diagrama Conceptual (puede ser estático o dinámico) */}  
+          {/* Diagrama Conceptual */}  
           <Card className="custom-card mt-4">  
             <Card.Header className="bg-success text-white">  
               <h5 className="mb-0">🗺️ Diagrama Conceptual de la Red</h5>  
             </Card.Header>  
             <Card.Body>  
               <div className="text-center p-4" style={{ backgroundColor: '#f8f9fa', borderRadius: '10px' }}>  
-                {/* Este diagrama es estático, podrías hacerlo dinámico con librerías de visualización de grafos */}  
-                <p className="text-muted">Este es un diagrama conceptual estático. Para una visualización dinámica, se requeriría una librería de grafos.</p>  
+                <Mermaid chart={conceptualDiagramMermaid} /> {/* Renderiza el diagrama Mermaid */}  
               </div>  
             </Card.Body>  
           </Card>  

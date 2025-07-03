@@ -3,25 +3,34 @@ import { Card, Form, Button, Row, Col, Alert, Tab, Tabs, Spinner } from 'react-b
 import { networkService } from '../../services/api';  
   
 const IncidentManager = () => {  
-  const [activeTab, setActiveTab] = useState('add-zone'); // Puedes cambiar la pestaña inicial para probar  
+  const [activeTab, setActiveTab] = useState('close-street'); // Pestaña inicial  
   const [loading, setLoading] = useState(false);  
   const [message, setMessage] = useState('');  
   const [messageType, setMessageType] = useState('');  
   
+  // Estados para los formularios  
+  const [closeStreetData, setCloseStreetData] = useState({ origen: '', destino: '' });  
+  const [openStreetData, setOpenStreetData] = useState({ origen: '', destino: '' });  
+  const [updateTimeData, setUpdateTimeData] = useState({ origen: '', destino: '', nuevoTiempo: '' });  
+  const [addZoneData, setAddZoneData] = useState({ nombre: '', tipoZona: '', conexionDestino: '', conexionTiempo: '', conexionTrafico: '', conexionCapacidad: '' });  
+  
+  
   const handleCloseStreet = async (e) => {  
     e.preventDefault();  
     setLoading(true);  
-    const formData = new FormData(e.target);  
-      
+    setMessage('');  
+    setMessageType('');  
     try {  
-      await networkService.closeStreet(  
-        formData.get('origen'),  
-        formData.get('destino')  
-      );  
-      setMessage('Calle cerrada exitosamente. Simula obras o incidentes.');  
-      setMessageType('success');  
+      const response = await networkService.closeStreet(closeStreetData.origen, closeStreetData.destino);  
+      if (response.data.success) {  
+        setMessage(response.data.message);  
+        setMessageType('success');  
+      } else {  
+        setMessage(response.data.message);  
+        setMessageType('danger');  
+      }  
     } catch (err) {  
-      setMessage('Error al cerrar la calle: ' + err.message);  
+      setMessage('Error al cerrar calle: ' + err.message);  
       setMessageType('danger');  
     } finally {  
       setLoading(false);  
@@ -31,17 +40,45 @@ const IncidentManager = () => {
   const handleOpenStreet = async (e) => {  
     e.preventDefault();  
     setLoading(true);  
-    const formData = new FormData(e.target);  
-      
+    setMessage('');  
+    setMessageType('');  
     try {  
-      await networkService.openStreet(  
-        formData.get('origen'),  
-        formData.get('destino')  
-      );  
-      setMessage('Calle reabierta exitosamente.');  
-      setMessageType('success');  
+      const response = await networkService.openStreet(openStreetData.origen, openStreetData.destino);  
+      if (response.data.success) {  
+        setMessage(response.data.message);  
+        setMessageType('success');  
+      } else {  
+        setMessage(response.data.message);  
+        setMessageType('danger');  
+      }  
     } catch (err) {  
-      setMessage('Error al reabrir la calle: ' + err.message);  
+      setMessage('Error al reabrir calle: ' + err.message);  
+      setMessageType('danger');  
+    } finally {  
+      setLoading(false);  
+    }  
+  };  
+  
+  const handleUpdateTime = async (e) => {  
+    e.preventDefault();  
+    setLoading(true);  
+    setMessage('');  
+    setMessageType('');  
+    try {  
+      const response = await networkService.updateStreetTime(  
+        updateTimeData.origen,  
+        updateTimeData.destino,  
+        parseInt(updateTimeData.nuevoTiempo)  
+      );  
+      if (response.data.success) {  
+        setMessage(response.data.message);  
+        setMessageType('success');  
+      } else {  
+        setMessage(response.data.message);  
+        setMessageType('danger');  
+      }  
+    } catch (err) {  
+      setMessage('Error al actualizar tiempo: ' + err.message);  
       setMessageType('danger');  
     } finally {  
       setLoading(false);  
@@ -53,19 +90,18 @@ const IncidentManager = () => {
     setLoading(true);  
     setMessage(''); // Limpiar mensajes anteriores  
     setMessageType('');  
-    const formData = new FormData(e.target);  
       
     try {  
       const conexiones = [{  
-        destino: formData.get('conexionDestino'),  
-        tiempo: parseInt(formData.get('conexionTiempo')),  
-        trafico: formData.get('conexionTrafico'),  
-        capacidad: parseInt(formData.get('conexionCapacidad'))  
+        destino: addZoneData.conexionDestino,  
+        tiempo: parseInt(addZoneData.conexionTiempo),  
+        trafico: addZoneData.conexionTrafico,  
+        capacidad: parseInt(addZoneData.conexionCapacidad)  
       }];  
   
       const response = await networkService.addZone(  
-        formData.get('nombre'),  
-        formData.get('tipoZona'),  
+        addZoneData.nombre,  
+        addZoneData.tipoZona,  
         conexiones  
       );  
   
@@ -73,12 +109,10 @@ const IncidentManager = () => {
         setMessage(response.data.message);  
         setMessageType('success');  
       } else {  
-        // Manejar el mensaje específico de zona existente  
         setMessage(response.data.message);  
-        setMessageType('warning'); // O 'danger' si prefieres un color más fuerte para este tipo de mensaje  
+        setMessageType('warning');   
       }  
     } catch (err) {  
-      // Capturar errores de red o del servidor que no son manejados por el backend  
       if (err.response && err.response.data && err.response.data.message) {  
         setMessage('Error al agregar zona: ' + err.response.data.message);  
       } else {  
@@ -95,8 +129,162 @@ const IncidentManager = () => {
       <h2 className="mb-4 text-primary">🚨 Gestión de Incidentes y Modificaciones</h2>  
         
       <Tabs activeKey={activeTab} onSelect={setActiveTab} className="mb-4">  
-        {/* ... (Tabs para close-street, open-street, update-time - permanecen iguales) */}  
+        {/* Pestaña Cerrar Calle */}  
+        <Tab eventKey="close-street" title="🚧 Cerrar Calle">  
+          <Card className="custom-card">  
+            <Card.Header className="bg-danger text-white">  
+              <h5 className="mb-0">Cerrar Calle Temporalmente</h5>  
+            </Card.Header>  
+            <Card.Body>  
+              <Form onSubmit={handleCloseStreet}>  
+                <Form.Group className="mb-3">  
+                  <Form.Label>Origen</Form.Label>  
+                  <Form.Control  
+                    type="text"  
+                    value={closeStreetData.origen}  
+                    onChange={(e) => setCloseStreetData({ ...closeStreetData, origen: e.target.value })}  
+                    placeholder="Ej: Altamira"  
+                    required  
+                  />  
+                </Form.Group>  
+                <Form.Group className="mb-3">  
+                  <Form.Label>Destino</Form.Label>  
+                  <Form.Control  
+                    type="text"  
+                    value={closeStreetData.destino}  
+                    onChange={(e) => setCloseStreetData({ ...closeStreetData, destino: e.target.value })}  
+                    placeholder="Ej: Chacao"  
+                    required  
+                  />  
+                </Form.Group>  
+                <Button   
+                  type="submit"   
+                  variant="danger"   
+                  disabled={loading}  
+                  className="w-100"  
+                >  
+                  {loading ? (  
+                    <>  
+                      <Spinner size="sm" className="me-2" />  
+                      Cerrando...  
+                    </>  
+                  ) : (  
+                    '🚫 Cerrar Calle'  
+                  )}  
+                </Button>  
+              </Form>  
+            </Card.Body>  
+          </Card>  
+        </Tab>  
   
+        {/* Pestaña Reabrir Calle */}  
+        <Tab eventKey="open-street" title="✅ Reabrir Calle">  
+          <Card className="custom-card">  
+            <Card.Header className="bg-success text-white">  
+              <h5 className="mb-0">Reabrir Calle</h5>  
+            </Card.Header>  
+            <Card.Body>  
+              <Form onSubmit={handleOpenStreet}>  
+                <Form.Group className="mb-3">  
+                  <Form.Label>Origen</Form.Label>  
+                  <Form.Control  
+                    type="text"  
+                    value={openStreetData.origen}  
+                    onChange={(e) => setOpenStreetData({ ...openStreetData, origen: e.target.value })}  
+                    placeholder="Ej: Altamira"  
+                    required  
+                  />  
+                </Form.Group>  
+                <Form.Group className="mb-3">  
+                  <Form.Label>Destino</Form.Label>  
+                  <Form.Control  
+                    type="text"  
+                    value={openStreetData.destino}  
+                    onChange={(e) => setOpenStreetData({ ...openStreetData, destino: e.target.value })}  
+                    placeholder="Ej: Chacao"  
+                    required  
+                  />  
+                </Form.Group>  
+                <Button   
+                  type="submit"   
+                  variant="success"   
+                  disabled={loading}  
+                  className="w-100"  
+                >  
+                  {loading ? (  
+                    <>  
+                      <Spinner size="sm" className="me-2" />  
+                      Reabriendo...  
+                    </>  
+                  ) : (  
+                    '✅ Reabrir Calle'  
+                  )}  
+                </Button>  
+              </Form>  
+            </Card.Body>  
+          </Card>  
+        </Tab>  
+  
+        {/* Pestaña Actualizar Tiempo */}  
+        <Tab eventKey="update-time" title="⏱️ Actualizar Tiempo">  
+          <Card className="custom-card">  
+            <Card.Header className="bg-warning text-dark">  
+              <h5 className="mb-0">Actualizar Tiempo de Tránsito</h5>  
+            </Card.Header>  
+            <Card.Body>  
+              <Form onSubmit={handleUpdateTime}>  
+                <Form.Group className="mb-3">  
+                  <Form.Label>Origen</Form.Label>  
+                  <Form.Control  
+                    type="text"  
+                    value={updateTimeData.origen}  
+                    onChange={(e) => setUpdateTimeData({ ...updateTimeData, origen: e.target.value })}  
+                    placeholder="Ej: Altamira"  
+                    required  
+                  />  
+                </Form.Group>  
+                <Form.Group className="mb-3">  
+                  <Form.Label>Destino</Form.Label>  
+                  <Form.Control  
+                    type="text"  
+                    value={updateTimeData.destino}  
+                    onChange={(e) => setUpdateTimeData({ ...updateTimeData, destino: e.target.value })}  
+                    placeholder="Ej: Chacao"  
+                    required  
+                  />  
+                </Form.Group>  
+                <Form.Group className="mb-3">  
+                  <Form.Label>Nuevo Tiempo (minutos)</Form.Label>  
+                  <Form.Control  
+                    type="number"  
+                    value={updateTimeData.nuevoTiempo}  
+                    onChange={(e) => setUpdateTimeData({ ...updateTimeData, nuevoTiempo: e.target.value })}  
+                    placeholder="Ej: 10"  
+                    min="1"  
+                    required  
+                  />  
+                </Form.Group>  
+                <Button   
+                  type="submit"   
+                  variant="warning"   
+                  disabled={loading}  
+                  className="w-100"  
+                >  
+                  {loading ? (  
+                    <>  
+                      <Spinner size="sm" className="me-2" />  
+                      Actualizando...  
+                    </>  
+                  ) : (  
+                    '⏱️ Actualizar Tiempo'  
+                  )}  
+                </Button>  
+              </Form>  
+            </Card.Body>  
+          </Card>  
+        </Tab>  
+  
+        {/* Pestaña Agregar Zona (ya existente) */}  
         <Tab eventKey="add-zone" title="📍 Agregar Zona">  
           <Card className="custom-card">  
             <Card.Header className="bg-info text-white">  
@@ -111,6 +299,8 @@ const IncidentManager = () => {
                       <Form.Control  
                         type="text"  
                         name="nombre"  
+                        value={addZoneData.nombre}  
+                        onChange={(e) => setAddZoneData({ ...addZoneData, nombre: e.target.value })}  
                         placeholder="Ej: La Urbina"  
                         required  
                       />  
@@ -119,7 +309,12 @@ const IncidentManager = () => {
                   <Col md={6}>  
                     <Form.Group className="mb-3">  
                       <Form.Label>Tipo de Zona</Form.Label>  
-                      <Form.Select name="tipoZona" required>  
+                      <Form.Select  
+                        name="tipoZona"  
+                        value={addZoneData.tipoZona}  
+                        onChange={(e) => setAddZoneData({ ...addZoneData, tipoZona: e.target.value })}  
+                        required  
+                      >  
                         <option value="">Seleccionar tipo</option>  
                         <option value="residencial">Residencial</option>  
                         <option value="comercial">Comercial</option>  
@@ -136,6 +331,8 @@ const IncidentManager = () => {
                       <Form.Control  
                         type="text"  
                         name="conexionDestino"  
+                        value={addZoneData.conexionDestino}  
+                        onChange={(e) => setAddZoneData({ ...addZoneData, conexionDestino: e.target.value })}  
                         placeholder="Ej: CD_1"  
                         required  
                       />  
@@ -147,6 +344,8 @@ const IncidentManager = () => {
                       <Form.Control  
                         type="number"  
                         name="conexionTiempo"  
+                        value={addZoneData.conexionTiempo}  
+                        onChange={(e) => setAddZoneData({ ...addZoneData, conexionTiempo: e.target.value })}  
                         placeholder="15"  
                         min="1"  
                         required  
@@ -158,7 +357,12 @@ const IncidentManager = () => {
                   <Col md={6}>  
                     <Form.Group className="mb-3">  
                       <Form.Label>Nivel de Tráfico</Form.Label>  
-                      <Form.Select name="conexionTrafico" required>  
+                      <Form.Select  
+                        name="conexionTrafico"  
+                        value={addZoneData.conexionTrafico}  
+                        onChange={(e) => setAddZoneData({ ...addZoneData, conexionTrafico: e.target.value })}  
+                        required  
+                      >  
                         <option value="">Seleccionar nivel</option>  
                         <option value="bajo">Bajo</option>  
                         <option value="medio">Medio</option>  
@@ -172,6 +376,8 @@ const IncidentManager = () => {
                       <Form.Control  
                         type="number"  
                         name="conexionCapacidad"  
+                        value={addZoneData.conexionCapacidad}  
+                        onChange={(e) => setAddZoneData({ ...addZoneData, conexionCapacidad: e.target.value })}  
                         placeholder="100"  
                         min="1"  
                         required  
