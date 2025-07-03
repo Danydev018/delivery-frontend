@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';  
-import { Card, Row, Col, Badge, Alert, Button } from 'react-bootstrap';  
+import { Card, Row, Col, Badge, Alert, Button, Spinner } from 'react-bootstrap';  
 import { graphService } from '../../services/api';  
   
 const GraphVisualization = () => {  
@@ -7,53 +7,51 @@ const GraphVisualization = () => {
   const [loading, setLoading] = useState(false);  
   const [message, setMessage] = useState('');  
   
-  // Datos del modelo basados en tu backend  
-  const modelData = {  
-    nodes: [  
-      { id: 'CD_1', type: 'CentroDistribucion', label: 'CD_1' },  
-      { id: 'CD_2', type: 'CentroDistribucion', label: 'CD_2' },  
-      { id: 'Altamira', type: 'Zona', subtype: 'residencial', label: 'Altamira' },  
-      { id: 'Chacao', type: 'Zona', subtype: 'comercial', label: 'Chacao' },  
-      { id: 'Las Mercedes', type: 'Zona', subtype: 'comercial', label: 'Las Mercedes' },  
-      { id: 'La Urbina', type: 'Zona', subtype: 'residencial', label: 'La Urbina' },  
-      { id: 'Petare', type: 'Zona', subtype: 'residencial', label: 'Petare' },  
-      { id: 'El Rosal', type: 'Zona', subtype: 'comercial', label: 'El Rosal' },  
-      { id: 'Los Palos Grandes', type: 'Zona', subtype: 'residencial', label: 'Los Palos Grandes' },  
-      { id: 'El Cafetal', type: 'Zona', subtype: 'residencial', label: 'El Cafetal' }  
-    ],  
-    relationships: [  
-      { from: 'CD_1', to: 'Altamira', tiempo: 5, trafico: 'medio', capacidad: 3 },  
-      { from: 'Altamira', to: 'Chacao', tiempo: 4, trafico: 'bajo', capacidad: 2 },  
-      { from: 'Chacao', to: 'Las Mercedes', tiempo: 6, trafico: 'alto', capacidad: 2 },  
-      { from: 'Las Mercedes', to: 'La Urbina', tiempo: 7, trafico: 'medio', capacidad: 2 },  
-      { from: 'La Urbina', to: 'Petare', tiempo: 8, trafico: 'bajo', capacidad: 2 },  
-      { from: 'Petare', to: 'El Rosal', tiempo: 9, trafico: 'medio', capacidad: 3 },  
-      { from: 'El Rosal', to: 'Los Palos Grandes', tiempo: 3, trafico: 'bajo', capacidad: 2 },  
-      { from: 'Los Palos Grandes', to: 'El Cafetal', tiempo: 4, trafico: 'alto', capacidad: 2 },  
-      { from: 'CD_2', to: 'Las Mercedes', tiempo: 6, trafico: 'medio', capacidad: 3 }  
-    ]  
+  // Función para convertir Neo4j Integer a número JavaScript  
+  const convertNeo4jInteger = (neo4jInt) => {  
+    if (neo4jInt && typeof neo4jInt === 'object' && 'low' in neo4jInt) {  
+      return neo4jInt.low;  
+    }  
+    return neo4jInt || 0;  
+  };  
+  
+  const loadGraphData = async () => {  
+    setLoading(true);  
+    setMessage('');  
+    try {  
+      const response = await graphService.getAll();  
+      setGraphData(response.data);  
+      setMessage('Datos del grafo cargados correctamente.');  
+    } catch (err) {  
+      setMessage('Error al cargar los datos del grafo: ' + err.message);  
+      console.error('Error al cargar datos del grafo:', err);  
+    } finally {  
+      setLoading(false);  
+    }  
   };  
   
   const initializeGraph = async () => {  
     setLoading(true);  
+    setMessage('');  
     try {  
       await graphService.migrateAndSeed();  
       setMessage('Modelo de grafos inicializado correctamente en Neo4j');  
-      setGraphData(modelData);  
+      await loadGraphData();  
     } catch (err) {  
       setMessage('Error al inicializar el modelo: ' + err.message);  
+      console.error('Error al inicializar el grafo:', err);  
     } finally {  
       setLoading(false);  
     }  
   };  
   
   useEffect(() => {  
-    setGraphData(modelData);  
+    loadGraphData();  
   }, []);  
   
   const getNodeColor = (node) => {  
     if (node.type === 'CentroDistribucion') return 'primary';  
-    return node.subtype === 'comercial' ? 'info' : 'success';  
+    return node.tipoZona === 'comercial' ? 'info' : 'success';  
   };  
   
   const getTrafficColor = (trafico) => {  
@@ -77,7 +75,14 @@ const GraphVisualization = () => {
           onClick={initializeGraph}  
           disabled={loading}  
         >  
-          {loading ? 'Inicializando...' : '🔄 Inicializar Modelo'}  
+          {loading ? (  
+            <>  
+              <Spinner size="sm" className="me-2" />  
+              Inicializando...  
+            </>  
+          ) : (  
+            '🔄 Inicializar Modelo'  
+          )}  
         </Button>  
       </div>  
   
@@ -87,9 +92,18 @@ const GraphVisualization = () => {
         </Alert>  
       )}  
   
+      {loading && !graphData && (  
+        <div className="text-center my-5">  
+          <Spinner animation="border" role="status" variant="primary">  
+            <span className="visually-hidden">Cargando datos del grafo...</span>  
+          </Spinner>  
+          <p className="mt-2 text-muted">Cargando datos del grafo...</p>  
+        </div>  
+      )}  
+  
       {graphData && (  
         <>  
-          {/* Esquema del Modelo */}  
+          {/* Esquema del Modelo (puede ser estático o dinámico si lo obtienes del backend) */}  
           <Row className="mb-4">  
             <Col md={6}>  
               <Card className="custom-card">  
@@ -152,9 +166,9 @@ const GraphVisualization = () => {
                       <Badge bg={getNodeColor(node)} className="mb-2">  
                         {node.type}  
                       </Badge>  
-                      <div className="fw-bold">{node.label}</div>  
-                      {node.subtype && (  
-                        <small className="text-muted">{node.subtype}</small>  
+                      <div className="fw-bold">{node.nombre}</div>  
+                      {node.tipoZona && (  
+                        <small className="text-muted">{node.tipoZona}</small>  
                       )}  
                     </div>  
                   </Col>  
@@ -194,14 +208,14 @@ const GraphVisualization = () => {
                           </Badge>  
                         </td>  
                         <td>  
-                          <span className="fw-bold text-primary">{rel.tiempo}</span>  
+                          <span className="fw-bold text-primary">{convertNeo4jInteger(rel.tiempo_minutos)}</span>  
                         </td>  
                         <td>  
-                          <Badge bg={getTrafficColor(rel.trafico)}>  
-                            {rel.trafico}  
+                          <Badge bg={getTrafficColor(rel.trafico_actual)}>  
+                            {rel.trafico_actual}  
                           </Badge>  
                         </td>  
-                        <td>{rel.capacidad}</td>  
+                        <td>{convertNeo4jInteger(rel.capacidad)}</td>  
                       </tr>  
                     ))}  
                   </tbody>  
@@ -210,39 +224,15 @@ const GraphVisualization = () => {
             </Card.Body>  
           </Card>  
   
-          {/* Diagrama Conceptual */}  
+          {/* Diagrama Conceptual (puede ser estático o dinámico) */}  
           <Card className="custom-card mt-4">  
             <Card.Header className="bg-success text-white">  
               <h5 className="mb-0">🗺️ Diagrama Conceptual de la Red</h5>  
             </Card.Header>  
             <Card.Body>  
               <div className="text-center p-4" style={{ backgroundColor: '#f8f9fa', borderRadius: '10px' }}>  
-                <div className="mb-3">  
-                  <span className="badge bg-primary me-2">🏢 CD_1</span>  
-                  <span className="text-muted">→ (5min) →</span>  
-                  <span className="badge bg-success ms-2">📍 Altamira</span>  
-                </div>  
-                <div className="mb-3">  
-                  <span className="badge bg-success me-2">📍 Altamira</span>  
-                  <span className="text-muted">→ (4min) →</span>  
-                  <span className="badge bg-info ms-2">📍 Chacao</span>  
-                </div>  
-                <div className="mb-3">  
-                  <span className="badge bg-info me-2">📍 Chacao</span>  
-                  <span className="text-muted">→ (6min) →</span>  
-                  <span className="badge bg-info ms-2">📍 Las Mercedes</span>  
-                </div>  
-                <div className="mb-3">  
-                  <span className="badge bg-primary me-2">🏢 CD_2</span>  
-                  <span className="text-muted">→ (6min) →</span>  
-                  <span className="badge bg-info ms-2">📍 Las Mercedes</span>  
-                </div>  
-                <div className="text-muted small mt-3">  
-                  <strong>Leyenda:</strong>   
-                  <span className="badge bg-primary ms-2">Centro Distribución</span>  
-                  <span className="badge bg-info ms-2">Zona Comercial</span>  
-                  <span className="badge bg-success ms-2">Zona Residencial</span>  
-                </div>  
+                {/* Este diagrama es estático, podrías hacerlo dinámico con librerías de visualización de grafos */}  
+                <p className="text-muted">Este es un diagrama conceptual estático. Para una visualización dinámica, se requeriría una librería de grafos.</p>  
               </div>  
             </Card.Body>  
           </Card>  

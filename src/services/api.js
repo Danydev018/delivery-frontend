@@ -54,5 +54,7 @@ export const networkService = {
 // Servicios de grafo  
 export const graphService = {  
   migrateAndSeed: () =>  
-    api.post('/graph/migrate-and-seed')  
+    api.post('/graph/migrate-and-seed'),  
+  getAll: () => // Nuevo servicio  
+    api.get('/graph/all')  
 };
