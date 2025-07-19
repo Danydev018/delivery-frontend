@@ -94,7 +94,7 @@ const DijkstraCalculator = () => {
                     value={values.center}  
                     onChange={(e) => handleChange('center', e.target.value)}  
                     onBlur={() => handleBlur('center')}  
-                    placeholder="Ej: CD_1"  
+                    placeholder="Ej: CD_PuertoOrdaz"  
                     isInvalid={touched.center && errors.center}  
                     required  
                   />  
@@ -113,7 +113,7 @@ const DijkstraCalculator = () => {
                     value={values.zona}  
                     onChange={(e) => handleChange('zona', e.target.value)}  
                     onBlur={() => handleBlur('zona')}  
-                    placeholder="Ej: Altamira"  
+                    placeholder="Ej: VillaAsia"  
                     isInvalid={touched.zona && errors.zona}  
                     required  
                   />  

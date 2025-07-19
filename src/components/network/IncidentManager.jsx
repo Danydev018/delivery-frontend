@@ -143,7 +143,7 @@ const IncidentManager = () => {
                     type="text"  
                     value={closeStreetData.origen}  
                     onChange={(e) => setCloseStreetData({ ...closeStreetData, origen: e.target.value })}  
-                    placeholder="Ej: Altamira"  
+                    placeholder="Ej: LasAmericas"  
                     required  
                   />  
                 </Form.Group>  
@@ -153,7 +153,7 @@ const IncidentManager = () => {
                     type="text"  
                     value={closeStreetData.destino}  
                     onChange={(e) => setCloseStreetData({ ...closeStreetData, destino: e.target.value })}  
-                    placeholder="Ej: Chacao"  
+                    placeholder="Ej: LosPinos"  
                     required  
                   />  
                 </Form.Group>  
@@ -191,7 +191,7 @@ const IncidentManager = () => {
                     type="text"  
                     value={openStreetData.origen}  
                     onChange={(e) => setOpenStreetData({ ...openStreetData, origen: e.target.value })}  
-                    placeholder="Ej: Altamira"  
+                    placeholder="Ej: LasPeonias"  
                     required  
                   />  
                 </Form.Group>  
@@ -201,7 +201,7 @@ const IncidentManager = () => {
                     type="text"  
                     value={openStreetData.destino}  
                     onChange={(e) => setOpenStreetData({ ...openStreetData, destino: e.target.value })}  
-                    placeholder="Ej: Chacao"  
+                    placeholder="Ej: VillaAsia"  
                     required  
                   />  
                 </Form.Group>  
@@ -239,7 +239,7 @@ const IncidentManager = () => {
                     type="text"  
                     value={updateTimeData.origen}  
                     onChange={(e) => setUpdateTimeData({ ...updateTimeData, origen: e.target.value })}  
-                    placeholder="Ej: Altamira"  
+                    placeholder="Ej: Core8"  
                     required  
                   />  
                 </Form.Group>  
@@ -249,7 +249,7 @@ const IncidentManager = () => {
                     type="text"  
                     value={updateTimeData.destino}  
                     onChange={(e) => setUpdateTimeData({ ...updateTimeData, destino: e.target.value })}  
-                    placeholder="Ej: Chacao"  
+                    placeholder="Ej: LasAmericas"  
                     required  
                   />  
                 </Form.Group>  
@@ -301,7 +301,7 @@ const IncidentManager = () => {
                         name="nombre"  
                         value={addZoneData.nombre}  
                         onChange={(e) => setAddZoneData({ ...addZoneData, nombre: e.target.value })}  
-                        placeholder="Ej: La Urbina"  
+                        placeholder="Ej: VillaUniversitaria"  
                         required  
                       />  
                     </Form.Group>  
@@ -333,7 +333,7 @@ const IncidentManager = () => {
                         name="conexionDestino"  
                         value={addZoneData.conexionDestino}  
                         onChange={(e) => setAddZoneData({ ...addZoneData, conexionDestino: e.target.value })}  
-                        placeholder="Ej: CD_1"  
+                        placeholder="Ej: CD_PuertoOrdaz"  
                         required  
                       />  
                     </Form.Group>  

@@ -249,7 +249,7 @@ const NetworkAnalysis = () => {
                     type="text"  
                     value={isolatedZoneName}  
                     onChange={(e) => setIsolatedZoneName(e.target.value)}  
-                    placeholder="Ej: Chacao"  
+                    placeholder="Ej: Core8"  
                     required  
                   />  
                 </Form.Group>  

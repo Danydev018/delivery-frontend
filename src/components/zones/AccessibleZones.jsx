@@ -76,7 +76,7 @@ if (accessibleZones.length > 0) {
                     type="text"  
                     value={formData.center}  
                     onChange={(e) => setFormData({...formData, center: e.target.value})}  
-                    placeholder="Ej: CD_1"  
+                    placeholder="Ej: CD_CiudadBolivar"  
                     required  
                   />  
                   <Form.Text className="text-muted">  
@@ -145,29 +145,29 @@ if (accessibleZones.length > 0) {
                       <th>Tráfico</th>  
                     </tr>  
                   </thead>  
-                  <tbody>  
-                    {accessibleZones.map((zone, index) => (  
-                      <tr key={index}>  
-                        <td>  
-                          <strong>{safeRender(zone._fields?.[0])}</strong>  
-                        </td>  
-                        <td>  
-                          <Badge bg="secondary">  
-                            {safeRender(zone._fields?.[1])}  
-                          </Badge>  
-                        </td>  
-                        <td>  
-                          <span className="text-primary fw-bold">  
-                            {safeRender(zone._fields?.[2])} {/* Tiempo convertido */}  
-                          </span>  
-                        </td>  
-                        <td>  
-                          <Badge bg="secondary">  
-                            {safeRender(zone._fields?.[3])}  
-                          </Badge>  
-                        </td>  
-                      </tr>  
-                    ))}  
+                  <tbody>
+                    {accessibleZones.map((zone, index) => (
+                      <tr key={index}>
+                        <td>
+                          <strong>{safeRender(zone._fields?.[0])}</strong>
+                        </td>
+                        <td>
+                          <Badge bg={getZoneTypeBadge(safeRender(zone._fields?.[2]))}>
+                            {zone._fields?.[2] !== undefined && safeRender(zone._fields?.[2]) !== '' ? safeRender(zone._fields?.[2]) : 'N/A'}
+                          </Badge>
+                        </td>
+                        <td>
+                          <span className="text-primary fw-bold">
+                            {safeRender(zone._fields?.[1])}
+                          </span>
+                        </td>
+                        <td>
+                          <Badge bg="secondary">
+                            {zone._fields?.[3] !== undefined ? safeRender(zone._fields?.[3]) : 'N/A'}
+                          </Badge>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>  
                 </Table>  
               </Card.Body>  
